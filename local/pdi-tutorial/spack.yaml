@@ -1,0 +1,116 @@
+# This is a Spack Environment file.
+#
+# It describes a set of packages to be installed, along with
+# configuration settings.
+spack:
+  view: true
+  concretizer:
+    unify: true
+
+  # add package specs to the `specs` list
+  specs:
+  - cmake
+  - kokkos
+  - pdi~fortran
+  - pdiplugin-decl-hdf5
+  - pdiplugin-mpi
+  - pdiplugin-pycall
+  - pdiplugin-trace
+  - pdiplugin-user-code
+  - pdiplugin-set-value
+  - python+tkinter
+  - py-dask
+  - py-distributed
+  - py-bokeh
+  - py-matplotlib
+  - py-mpi4py
+  - py-pip
+  - py-pytest
+  - git
+  - gdb
+  - gcc
+  config:
+    install_tree:
+      padded_length: 128
+  packages:
+    gcc:
+      externals:
+      - spec: gcc@13.3.0 languages:='c,c++,fortran'
+        prefix: /usr
+        extra_attributes:
+          compilers:
+            c: /usr/bin/gcc
+            cxx: /usr/bin/g++
+            fortran: /usr/bin/gfortran
+      - spec: gcc@13.3.0 languages:='c,c++'
+        prefix: /usr
+        extra_attributes:
+          compilers:
+            c: /usr/bin/gcc
+            cxx: /usr/bin/g++
+    binutils:
+      externals:
+      - spec: binutils@2.42+gold~headers
+        prefix: /usr
+    gettext:
+      externals:
+      - spec: gettext@0.21
+        prefix: /usr
+    perl:
+      externals:
+      - spec: perl@5.38.2~cpanm+opcode+open+shared+threads
+        prefix: /usr
+    findutils:
+      externals:
+      - spec: findutils@4.9.0
+        prefix: /usr
+    gmake:
+      externals:
+      - spec: gmake@4.3
+        prefix: /usr
+    groff:
+      externals:
+      - spec: groff@1.23.0
+        prefix: /usr
+    coreutils:
+      externals:
+      - spec: coreutils@9.4
+        prefix: /usr
+    openssh:
+      externals:
+      - spec: openssh@9.6p1
+        prefix: /usr
+    openssl:
+      externals:
+      - spec: openssl@3.0.13
+        prefix: /usr
+    git:
+      externals:
+      - spec: git@2.43.0~tcltk
+        prefix: /usr
+    sed:
+      externals:
+      - spec: sed@4.9
+        prefix: /usr
+    pkgconf:
+      externals:
+      - spec: pkgconf@1.8.1
+        prefix: /usr
+    diffutils:
+      externals:
+      - spec: diffutils@3.10
+        prefix: /usr
+    tar:
+      externals:
+      - spec: tar@1.35
+        prefix: /usr
+    curl:
+      externals:
+      - spec: curl@8.5.0+gssapi+ldap+nghttp2
+        prefix: /usr
+  mirrors:
+    numpex-spack-mirror:
+      url: oci://ghcr.io/thomas-bouvier/numpex-spack-mirror
+      access_pair:
+        id_variable: OCI_USERNAME_VARIABLE
+        secret_variable: OCI_PASSWORD_VARIABLE
