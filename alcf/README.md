@@ -1,6 +1,29 @@
 # ALCF
 
+Copy the relevant content of `.zshrc` into the frontend `.zshrc`.
+
 ## Polaris
+
+Change the default configuration if needed:
+
+```console
+spack config --scope defaults edit config
+build_stage: /local/scratch/tbouvier/spack-stage
+```
+
+Compilations lasting for more than one hour should be performed in the `preemptable` queue.
+
+```console
+qsub -I -l select=1:ngpus=1:system=polaris -q preemptable -l walltime=04:00:00 -A VeloC -l filesystems=home
+```
+
+Once you are logged in on a compute node, activate the environment and install it:
+
+```console
+use_polaris
+spack env activate git/spack-envs/polaris
+spack install
+```
 
 From [this guide](https://github.com/mochi-hpc-experiments/platform-configurations/blob/main/ANL/Polaris/README.md).
 
@@ -52,6 +75,14 @@ ensure that this version is used on Polaris.
 These instructions and environment examples will be updated if/when a
 matching json-c-devel package is installed on Polaris in the system
 environment.
+
+### Last successful installations:
+
+| Date | `spack-envs` commit | `spack-packages` commit | Spack commit | Notes |
+|----------|----------|----------|----------|----------|
+| 2024-09-28 | `44162d3` | `bbacb27` | `a8d02bd` | |
+| 2024-01-25 | `20e8e76` | `ad655c1` | `d079aaa` | Contents of `spack-packages/packages/py-continuum/package.py` copied into `spack/var/spack/repos/builtin/packages/py-continuum/package.py` |
+
 
 
 ## ThetaGPU
