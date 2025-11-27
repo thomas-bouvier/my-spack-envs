@@ -1,9 +1,13 @@
-# This is a Spack Environment file.
-#
-# It describes a set of packages to be installed, along with
-# configuration settings.
+Bootstrap: docker
+From: spack/ubuntu-noble:latest
+Stage: build
+
+%post
+  # Create the manifest file for the installation in /opt/spack-environment
+  mkdir /opt/spack-environment && cd /opt/spack-environment
+  cat << EOF > spack.yaml
 spack:
-  view: true
+  view: /opt/views/view
   concretizer:
     unify: true
   # add package specs to the `specs` list
@@ -28,16 +32,8 @@ spack:
   - git
   - gdb
   - gcc
-  container:
-    # docker | singularity
-    format: singularity
-    images:
-      os: "ubuntu:24.04"
-      spack: latest
-    strip: true
-  config:
-    install_tree:
-      padded_length: 128
+  #config:
+  #  install_tree: /opt/software
   packages:
     gcc:
       externals:
@@ -120,3 +116,37 @@ spack:
       access_pair:
         id_variable: OCI_USERNAME_VARIABLE
         secret_variable: OCI_PASSWORD_VARIABLE
+EOF
+
+  # Install all the required software
+  . /opt/spack/share/spack/setup-env.sh
+  spack -e . concretize
+  spack -e . install
+  spack gc -y
+  spack env activate --sh -d . >> /opt/spack-environment/environment_modifications.sh
+
+  # Strip the binaries to reduce the size of the image
+  find -L /opt/views/view/* -type f -exec readlink -f '{}' \; | \
+    xargs file -i | \
+    grep 'charset=binary' | \
+    grep 'x-executable\|x-archive\|x-sharedlib' | \
+    awk -F: '{print $1}' | xargs strip
+
+Bootstrap: docker
+From: ubuntu:24.04
+Stage: final
+
+%files from build
+  /opt/spack-environment /opt
+  /opt/software /opt
+  /opt/views /opt
+  /opt/spack-environment/environment_modifications.sh /opt/spack-environment/environment_modifications.sh
+
+%post
+
+  # Symlink the old view location
+  ln -s /opt/views/view /opt/view
+
+  # Modify the environment without relying on sourcing shell specific files at startup
+  cat /opt/spack-environment/environment_modifications.sh >> $SINGULARITY_ENVIRONMENT
+
