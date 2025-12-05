@@ -1,0 +1,24 @@
+spack:
+  repos:
+    korovod:
+      git: https://github.com/korovod/korovod-spack-packages.git
+  specs:
+  - cudnn
+  - mpi
+  - nccl +cuda cuda_arch=80
+  - nccl-tests +cuda cuda_arch=80
+  - magma +cuda cuda_arch=80
+  - py-torch@2.8 ~gloo ~valgrind ~caffe2 ~kineto +cuda cuda_arch=80 +nccl +cudnn +magma +distributed
+  - py-nanotron@main +datastates +nanosets ^korovod.py-htmldate ^korovod.kenlm
+  - py-datasets ^arrow +snappy
+  - python@3.13
+  - nvtx +python
+  - vim
+  - py-deepspeed
+  view: true
+  container:
+    format: docker
+    images:
+      os: "ubuntu:24.04"
+      spack: latest
+    strip: true
