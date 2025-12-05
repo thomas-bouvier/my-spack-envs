@@ -17,7 +17,7 @@ set -o noclobber \
 &&   echo '  - nccl-tests +cuda cuda_arch=80' \
 &&   echo '  - magma +cuda cuda_arch=80' \
 &&   echo '  - py-torch@2.8 ~gloo ~valgrind ~caffe2 ~kineto +cuda cuda_arch=80 +nccl +cudnn +magma +distributed' \
-&&   echo '  - py-nanotron@main +datastates +nanosets ^korovod.py-htmldate ^korovod.kenlm' \
+&&   echo '  - py-kenotron@main +datastates +nanosets ^korovod.py-htmldate ^korovod.kenlm' \
 &&   echo '  - py-datasets ^arrow +snappy' \
 &&   echo '  - python@3.13' \
 &&   echo '  - nvtx +python' \
