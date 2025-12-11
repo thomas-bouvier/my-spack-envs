@@ -31,7 +31,7 @@ set -o noclobber \
 &&   echo '  - py-pytest' \
 &&   echo '  - git' \
 &&   echo '  - gdb' \
-&&   echo '  - gcc' \
+&&   echo '  - gcc@14' \
 &&   echo '  config:' \
 &&   echo '    install_tree:' \
 &&   echo '      root: /opt/software' \

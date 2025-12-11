@@ -39,6 +39,7 @@ check_command() {
     fi
 }
 
+check_command gcc
 check_command cmake
 
 check_command mpicc

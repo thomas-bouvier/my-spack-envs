@@ -31,3 +31,7 @@ docker build -t myimage .
 # Apptainer
 apptainer build Apptainer.sif Apptainer.def
 ```
+
+## Future work
+
+- gcc can't compile programs https://gcc.gnu.org/bugzilla/show_bug.cgi?id=119560
