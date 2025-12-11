@@ -22,21 +22,6 @@ container:
   strip: true
 ```
 
-Change the following in the recipe:
-
-```yaml
-config:
-  install_tree: /opt/software
-```
-
-to
-
-```yaml
-config:
-  install_tree:
-    root: /opt/software
-```
-
 Finally, use one of these commands to generate a container:
 
 ```console
