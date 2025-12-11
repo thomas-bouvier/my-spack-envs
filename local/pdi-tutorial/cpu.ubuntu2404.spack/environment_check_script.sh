@@ -75,7 +75,7 @@ echo ""
 # fix: 
 # export DYLD_LIBRARY_PATH=$pdirun_directory/../lib
 
-cd "$(dirname "${BASH_SOURCE[0]}")/00_begin/solution"
+cd /root/tutorial/00_begin/solution
 mkdir build && cd build
 cp ../config.yml .
 cmake ..

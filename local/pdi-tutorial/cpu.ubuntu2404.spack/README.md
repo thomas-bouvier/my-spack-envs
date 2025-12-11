@@ -1,6 +1,6 @@
 # local/pdi-tutorial/cpu.ubuntu2404.spack
 
-Use on of the following commands to generate a container recipe
+Use one of the following commands to generate a container recipe:
 
 ```console
 # Docker

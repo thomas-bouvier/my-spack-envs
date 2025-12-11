@@ -56,6 +56,8 @@ RUN find -L /opt/views/view/* -type f -exec readlink -f '{}' \; | \
 RUN cd /opt/spack-environment && \
     spack env activate --sh -d . > activate.sh
 
+RUN git clone -b tutorial_HPCAsia https://github.com/pdidev/tutorial.git /root/tutorial
+
 
 # Bare OS image to run the installed executables
 FROM ubuntu:24.04
@@ -63,6 +65,7 @@ FROM ubuntu:24.04
 COPY --from=builder /opt/spack-environment /opt/spack-environment
 COPY --from=builder /opt/software /opt/software
 COPY --from=builder /opt/views /opt/views
+COPY --from=builder /root/tutorial /root/tutorial
 
 # Copy the validation script into the container
 COPY environment_check_script.sh /opt/environment_check_script.sh
@@ -76,7 +79,6 @@ RUN { \
     } > /entrypoint.sh \
 && chmod a+x /entrypoint.sh \
 && ln -s /opt/views/view /opt/view
-
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "/bin/bash" ]
