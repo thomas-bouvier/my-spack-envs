@@ -35,22 +35,6 @@ set -o noclobber \
 &&   echo '  config:' \
 &&   echo '    install_tree:' \
 &&   echo '      root: /opt/software' \
-&&   echo '  packages:' \
-&&   echo '    gcc:' \
-&&   echo '      externals:' \
-&&   echo '      - spec: gcc@13.3.0 languages:='"'"'c,c++,fortran'"'"'' \
-&&   echo '        prefix: /usr' \
-&&   echo '        extra_attributes:' \
-&&   echo '          compilers:' \
-&&   echo '            c: /usr/bin/gcc' \
-&&   echo '            cxx: /usr/bin/g++' \
-&&   echo '            fortran: /usr/bin/gfortran' \
-&&   echo '      - spec: gcc@13.3.0 languages:='"'"'c,c++'"'"'' \
-&&   echo '        prefix: /usr' \
-&&   echo '        extra_attributes:' \
-&&   echo '          compilers:' \
-&&   echo '            c: /usr/bin/gcc' \
-&&   echo '            cxx: /usr/bin/g++' \
 &&   echo '  mirrors:' \
 &&   echo '    numpex-spack-mirror:' \
 &&   echo '      url: oci://ghcr.io/thomas-bouvier/numpex-spack-mirror' \
@@ -78,13 +62,16 @@ FROM ubuntu:24.04
 
 COPY --from=builder /opt/spack-environment /opt/spack-environment
 COPY --from=builder /opt/software /opt/software
-
-# paths.view is a symlink, so copy the parent to avoid dereferencing and duplicating it
 COPY --from=builder /opt/views /opt/views
+
+# Copy the validation script into the container
+COPY environment_check_script.sh /opt/environment_check_script.sh
+RUN chmod +x /opt/environment_check_script.sh
 
 RUN { \
       echo '#!/bin/sh' \
       && echo '.' /opt/spack-environment/activate.sh \
+      && echo '/opt/environment_check_script.sh' \
       && echo 'exec "$@"'; \
     } > /entrypoint.sh \
 && chmod a+x /entrypoint.sh \
