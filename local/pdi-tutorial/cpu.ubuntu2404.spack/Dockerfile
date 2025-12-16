@@ -1,5 +1,5 @@
 # Build stage with Spack pre-installed and ready to be used
-FROM spack/ubuntu-noble:latest AS builder
+FROM spack/ubuntu-noble:nightly AS builder
 
 
 # What we want to install and how we want to install it
@@ -43,7 +43,22 @@ set -o noclobber \
 &&   echo '        secret_variable: OCI_PASSWORD_VARIABLE') > /opt/spack-environment/spack.yaml
 
 # Install the software, remove unnecessary deps
-RUN cd /opt/spack-environment && spack env activate . && spack install --fail-fast && spack gc -y
+RUN --mount=type=secret,id=oci_username_variable \
+    --mount=type=secret,id=oci_password_variable \
+    export OCI_USERNAME_VARIABLE=$(cat /run/secrets/oci_username_variable) && \
+    export OCI_PASSWORD_VARIABLE=$(cat /run/secrets/oci_password_variable) && \
+    cd /opt/spack-environment && spack env activate . && \
+    spack install --fail-fast
+
+# Update build cache
+RUN --mount=type=secret,id=oci_username_variable \
+    --mount=type=secret,id=oci_password_variable \
+    export OCI_USERNAME_VARIABLE=$(cat /run/secrets/oci_username_variable) && \
+    export OCI_PASSWORD_VARIABLE=$(cat /run/secrets/oci_password_variable) && \
+    cd /opt/spack-environment && spack env activate . && \
+    spack buildcache push --update-index --tag latest numpex-spack-mirror
+
+RUN cd /opt/spack-environment && spack env activate . && spack gc -y
 
 # Strip all the binaries
 RUN find -L /opt/views/view/* -type f -exec readlink -f '{}' \; | \
@@ -56,6 +71,7 @@ RUN find -L /opt/views/view/* -type f -exec readlink -f '{}' \; | \
 RUN cd /opt/spack-environment && \
     spack env activate --sh -d . > activate.sh
 
+# Clone tutorial
 RUN git clone -b tutorial_HPCAsia https://github.com/pdidev/tutorial.git /root/tutorial
 
 

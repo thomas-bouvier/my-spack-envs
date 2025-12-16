@@ -33,7 +33,7 @@ spack:
     format: docker
     images:
       os: "ubuntu:24.04"
-      spack: latest
+      spack: nightly
     strip: true
   config:
     install_tree:
