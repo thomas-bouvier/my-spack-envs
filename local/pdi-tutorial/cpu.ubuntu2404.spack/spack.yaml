@@ -27,7 +27,6 @@ spack:
   - py-pytest
   - git
   - gdb
-  - gcc@14 # this is a workaround to force Spack to NOT reuse gcc@13 as a system external
   container:
     # docker | singularity
     format: docker

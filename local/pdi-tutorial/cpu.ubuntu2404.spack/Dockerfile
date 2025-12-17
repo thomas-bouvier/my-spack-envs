@@ -22,7 +22,7 @@ set -o noclobber \
 &&   echo '  - pdiplugin-user-code' \
 &&   echo '  - pdiplugin-set-value' \
 &&   echo '  - python+tkinter' \
-&&   echo '  - py-dask' \
+&&   echo '  - py-dask~dataframe' \
 &&   echo '  - py-distributed' \
 &&   echo '  - py-bokeh' \
 &&   echo '  - py-matplotlib' \
@@ -31,7 +31,6 @@ set -o noclobber \
 &&   echo '  - py-pytest' \
 &&   echo '  - git' \
 &&   echo '  - gdb' \
-&&   echo '  - gcc@14' \
 &&   echo '  config:' \
 &&   echo '    install_tree:' \
 &&   echo '      root: /opt/software' \
@@ -59,6 +58,8 @@ RUN --mount=type=secret,id=oci_username_variable \
     spack buildcache push --update-index --tag latest numpex-spack-mirror
 
 RUN cd /opt/spack-environment && spack env activate . && spack gc -y
+
+RUN cd /opt/spack-environment && spack env activate . && spack spec
 
 # Strip all the binaries
 RUN find -L /opt/views/view/* -type f -exec readlink -f '{}' \; | \
@@ -96,6 +97,7 @@ RUN { \
 && chmod a+x /entrypoint.sh \
 && ln -s /opt/views/view /opt/view
 
+RUN apt-get update && apt-get install build-essential -y
+
 ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "/bin/bash" ]
-
