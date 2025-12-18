@@ -97,7 +97,9 @@ RUN { \
 && chmod a+x /entrypoint.sh \
 && ln -s /opt/views/view /opt/view
 
-RUN apt-get update && apt-get install build-essential -y
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "/bin/bash" ]

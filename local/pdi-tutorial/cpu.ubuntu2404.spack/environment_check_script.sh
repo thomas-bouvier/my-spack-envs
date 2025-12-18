@@ -30,6 +30,15 @@
 ## Then to source PDI :
 # source $PWD/../../install_pdi/share/pdi/env.sh
 
+
+echo "           _ _   _         _             _       _ "
+echo " _ __   __| (_) | |_ _   _| |_ ___  _ __(_) __ _| |"
+echo "| '_ \ / _\` | | | __| | | | __/ _ \| '__| |/ _\` | |"
+echo "| |_) | (_| | | | |_| |_| | || (_) | |  | | (_| | |"
+echo "| .__/ \__,_|_|  \__|\__,_|\__\___/|_|  |_|\__,_|_|"
+echo "|_|                                                "
+echo ""
+
 check_command() {
     if command -v "$1" >/dev/null 2>&1; then
         echo "$1 is installed."
