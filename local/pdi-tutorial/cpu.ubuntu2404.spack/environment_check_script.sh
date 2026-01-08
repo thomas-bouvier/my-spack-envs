@@ -85,7 +85,7 @@ echo ""
 # fix: 
 # export DYLD_LIBRARY_PATH=$pdirun_directory/../lib
 
-cd /root/tutorial/00_begin/solution
+cd /opt/tutorial/00_begin/solution
 mkdir build && cd build
 cp ../config.yml .
 cmake ..

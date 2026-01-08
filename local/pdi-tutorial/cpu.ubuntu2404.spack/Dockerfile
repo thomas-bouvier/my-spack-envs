@@ -31,6 +31,8 @@ set -o noclobber \
 &&   echo '  - py-pytest' \
 &&   echo '  - git' \
 &&   echo '  - gdb' \
+&&   echo '  - vim' \
+&&   echo '  - nano' \
 &&   echo '  config:' \
 &&   echo '    install_tree:' \
 &&   echo '      root: /opt/software' \
@@ -82,7 +84,7 @@ FROM ubuntu:24.04
 COPY --from=builder /opt/spack-environment /opt/spack-environment
 COPY --from=builder /opt/software /opt/software
 COPY --from=builder /opt/views /opt/views
-COPY --from=builder /root/tutorial /root/tutorial
+COPY --from=builder /root/tutorial /opt/tutorial
 
 # Copy the validation script into the container
 COPY environment_check_script.sh /opt/environment_check_script.sh
@@ -100,6 +102,19 @@ RUN { \
 RUN apt-get update \
     && apt-get install -y --no-install-recommends build-essential \
     && rm -rf /var/lib/apt/lists/*
+
+ENV SERVICE_NAME="pdi"
+RUN groupadd --gid 1001 $SERVICE_NAME && \
+    useradd -u 1001 -g $SERVICE_NAME --shell /bin/false --no-create-home --home-dir /opt/$SERVICE_NAME $SERVICE_NAME && \
+    mkdir -p /opt/$SERVICE_NAME /var/log/$SERVICE_NAME && \
+    chown $SERVICE_NAME:$SERVICE_NAME /opt/$SERVICE_NAME /var/log/$SERVICE_NAME
+
+# Change ownership of the entrypoint script to the service user
+RUN chown -R $SERVICE_NAME:$SERVICE_NAME /entrypoint.sh /opt/environment_check_script.sh /opt/tutorial
+
+USER $SERVICE_NAME
+
+WORKDIR /opt/tutorial
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "/bin/bash" ]
