@@ -14,6 +14,7 @@ set -o noclobber \
 &&   echo '  specs:' \
 &&   echo '  - cmake' \
 &&   echo '  - kokkos' \
+&&   echo '  - python@3.13 +tkinter' \
 &&   echo '  - pdi~fortran' \
 &&   echo '  - pdiplugin-decl-hdf5' \
 &&   echo '  - pdiplugin-mpi' \
@@ -21,7 +22,6 @@ set -o noclobber \
 &&   echo '  - pdiplugin-trace' \
 &&   echo '  - pdiplugin-user-code' \
 &&   echo '  - pdiplugin-set-value' \
-&&   echo '  - python+tkinter' \
 &&   echo '  - py-dask~dataframe' \
 &&   echo '  - py-distributed' \
 &&   echo '  - py-bokeh' \
@@ -90,18 +90,22 @@ COPY --from=builder /root/tutorial /opt/tutorial
 COPY environment_check_script.sh /opt/environment_check_script.sh
 RUN chmod +x /opt/environment_check_script.sh
 
+# Force the use of system gcc
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Notice than we force CC and CXX to system gcc
 RUN { \
       echo '#!/bin/sh' \
       && echo '.' /opt/spack-environment/activate.sh \
+      && echo 'export CC=/usr/bin/gcc' \
+      && echo 'export CXX=/usr/bin/g++' \
       && echo '/opt/environment_check_script.sh' \
       && echo 'exec "$@"'; \
     } > /entrypoint.sh \
 && chmod a+x /entrypoint.sh \
 && ln -s /opt/views/view /opt/view
-
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends build-essential \
-    && rm -rf /var/lib/apt/lists/*
 
 ENV SERVICE_NAME="pdi"
 RUN groupadd --gid 1001 $SERVICE_NAME && \
