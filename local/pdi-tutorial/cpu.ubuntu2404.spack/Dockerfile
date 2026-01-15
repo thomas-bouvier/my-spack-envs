@@ -79,7 +79,9 @@ RUN git clone -b tutorial_HPCAsia https://github.com/pdidev/tutorial.git /root/t
 
 
 # Bare OS image to run the installed executables
-FROM ubuntu:24.04
+FROM gcc:15
+
+ENV SERVICE_NAME="pdi"
 
 COPY --from=builder /opt/spack-environment /opt/spack-environment
 COPY --from=builder /opt/software /opt/software
@@ -88,33 +90,25 @@ COPY --from=builder /root/tutorial /opt/tutorial
 
 # Copy the validation script into the container
 COPY environment_check_script.sh /opt/environment_check_script.sh
-RUN chmod +x /opt/environment_check_script.sh
 
-# Force the use of system gcc
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends build-essential \
-    && rm -rf /var/lib/apt/lists/*
-
-# Notice than we force CC and CXX to system gcc
-RUN { \
+RUN chmod +x /opt/environment_check_script.sh \
+    # Notice than we force CC and CXX to system gcc
+    && { \
       echo '#!/bin/sh' \
       && echo '.' /opt/spack-environment/activate.sh \
-      && echo 'export CC=/usr/bin/gcc' \
-      && echo 'export CXX=/usr/bin/g++' \
+      && echo 'export CC=/usr/local/bin/gcc' \
+      && echo 'export CXX=/usr/local/bin/g++' \
       && echo '/opt/environment_check_script.sh' \
       && echo 'exec "$@"'; \
     } > /entrypoint.sh \
-&& chmod a+x /entrypoint.sh \
-&& ln -s /opt/views/view /opt/view
-
-ENV SERVICE_NAME="pdi"
-RUN groupadd --gid 1001 $SERVICE_NAME && \
-    useradd -u 1001 -g $SERVICE_NAME --shell /bin/false --no-create-home --home-dir /opt/$SERVICE_NAME $SERVICE_NAME && \
-    mkdir -p /opt/$SERVICE_NAME /var/log/$SERVICE_NAME && \
-    chown $SERVICE_NAME:$SERVICE_NAME /opt/$SERVICE_NAME /var/log/$SERVICE_NAME
-
-# Change ownership of the entrypoint script to the service user
-RUN chown -R $SERVICE_NAME:$SERVICE_NAME /entrypoint.sh /opt/environment_check_script.sh /opt/tutorial
+    && chmod a+x /entrypoint.sh \
+    && ln -s /opt/views/view /opt/view \
+    # Set up user
+    && groupadd --gid 1001 $SERVICE_NAME \
+    && useradd -u 1001 -g $SERVICE_NAME --shell /bin/false --no-create-home --home-dir /opt/$SERVICE_NAME $SERVICE_NAME \
+    && mkdir -p /opt/$SERVICE_NAME /var/log/$SERVICE_NAME \
+    # Change ownership of the entrypoint script to the service user
+    && chown -R $SERVICE_NAME:$SERVICE_NAME /opt/$SERVICE_NAME /var/log/$SERVICE_NAME /entrypoint.sh /opt/environment_check_script.sh /opt/tutorial
 
 USER $SERVICE_NAME
 
