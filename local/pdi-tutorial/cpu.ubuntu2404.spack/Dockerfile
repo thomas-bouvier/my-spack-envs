@@ -22,7 +22,8 @@ set -o noclobber \
 &&   echo '  - pdiplugin-trace' \
 &&   echo '  - pdiplugin-user-code' \
 &&   echo '  - pdiplugin-set-value' \
-&&   echo '  - py-dask~dataframe' \
+&&   echo '  - py-dask ~dataframe' \
+&&   echo '  - py-pandas ~performance' \
 &&   echo '  - py-distributed' \
 &&   echo '  - py-bokeh' \
 &&   echo '  - py-matplotlib' \
