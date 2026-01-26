@@ -1,6 +1,18 @@
 # Build stage with Spack pre-installed and ready to be used
-FROM spack/ubuntu-noble:nightly AS builder
+FROM docker.io/spack/ubuntu-noble:nightly AS builder
 
+# Configure a custom repo to serve patches
+RUN spack repo create ~/custom_packages tbouvier.patches
+
+RUN ls ~/custom_packages/spack_repo/tbouvier/patches
+RUN mkdir -p ~/custom_packages/spack_repo/tbouvier/patches/packages/py_py_spy && \
+    mkdir -p ~/custom_packages/spack_repo/tbouvier/patches/packages/py_ray
+
+COPY py_py_spy.package.py /root/custom_packages/spack_repo/tbouvier/patches/packages/py_py_spy/package.py
+COPY py_ray.package.py /root/custom_packages/spack_repo/tbouvier/patches/packages/py_ray/package.py
+
+RUN spack repo add ~/custom_packages/spack_repo/tbouvier/patches
+RUN spack repo list
 
 # What we want to install and how we want to install it
 # is specified in a manifest file (spack.yaml)
@@ -22,7 +34,8 @@ set -o noclobber \
 &&   echo '  - pdiplugin-trace' \
 &&   echo '  - pdiplugin-user-code' \
 &&   echo '  - pdiplugin-set-value' \
-&&   echo '  - py-dask ~dataframe' \
+&&   echo '  - tbouvier.patches.py-ray' \
+&&   echo '  - py-deisa ^py-dask ~dataframe' \
 &&   echo '  - py-pandas ~performance' \
 &&   echo '  - py-distributed' \
 &&   echo '  - py-bokeh' \
