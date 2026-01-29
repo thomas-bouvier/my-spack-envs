@@ -27,7 +27,7 @@ set -o noclobber \
 &&   echo '  - cmake' \
 &&   echo '  - kokkos' \
 &&   echo '  - python@3.13 +tkinter' \
-&&   echo '  - pdi~fortran' \
+&&   echo '  - pdi ~fortran' \
 &&   echo '  - pdiplugin-decl-hdf5' \
 &&   echo '  - pdiplugin-mpi' \
 &&   echo '  - pdiplugin-pycall' \
@@ -63,7 +63,7 @@ RUN --mount=type=secret,id=oci_username_variable \
     export OCI_USERNAME_VARIABLE=$(cat /run/secrets/oci_username_variable) && \
     export OCI_PASSWORD_VARIABLE=$(cat /run/secrets/oci_password_variable) && \
     cd /opt/spack-environment && spack env activate . && \
-    spack install --fail-fast
+    spack install --fail-fast --verbose -j1
 
 # Update build cache
 RUN --mount=type=secret,id=oci_username_variable \
@@ -93,7 +93,7 @@ RUN git clone -b tutorial_HPCAsia https://github.com/pdidev/tutorial.git /root/t
 
 
 # Bare OS image to run the installed executables
-FROM gcc:15
+FROM docker.io/gcc:15
 
 ENV SERVICE_NAME="pdi"
 
