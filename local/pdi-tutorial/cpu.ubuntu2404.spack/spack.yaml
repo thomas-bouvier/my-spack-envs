@@ -3,13 +3,13 @@
 # It describes a set of packages to be installed, along with
 # configuration settings.
 spack:
-  view: true
   concretizer:
     unify: true
   # add package specs to the `specs` list
   specs:
   - cmake
   - kokkos
+  - python@3.13 +tkinter
   - pdi~fortran
   - pdiplugin-decl-hdf5
   - pdiplugin-mpi
@@ -17,8 +17,9 @@ spack:
   - pdiplugin-trace
   - pdiplugin-user-code
   - pdiplugin-set-value
-  - python+tkinter
-  - py-dask
+  - tbouvier.patches.py-ray
+  - py-deisa ^py-dask ~dataframe
+  - py-pandas ~performance
   - py-distributed
   - py-bokeh
   - py-matplotlib
@@ -27,16 +28,19 @@ spack:
   - py-pytest
   - git
   - gdb
+  - vim
+  - nano
+  config:
+    template_dirs:
+    - templates
   container:
     # docker | singularity
     format: docker
     images:
-      os: "ubuntu:24.04"
-      spack: nightly
+      build: docker.io/spack/ubuntu-noble:nightly
+      final: docker.io/gcc:15
+    template: container/CustomDockerfile
     strip: true
-  config:
-    install_tree:
-      padded_length: 128
   mirrors:
     numpex-spack-mirror:
       url: oci://ghcr.io/thomas-bouvier/numpex-spack-mirror
