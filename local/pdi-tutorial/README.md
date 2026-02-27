@@ -150,6 +150,14 @@ RUN { \
     } > /entrypoint.sh \
 ```
 
+### Out of memory
+
+If the image build fails because of an Out of memory error, add flags `--verbose --j1` to your `spack install`:
+
+```dockerfile
+spack install --fail-fast --verbose -j1
+```
+
 ## Tricks to run the actual container
 
 The final image can be ran as a container as follows:

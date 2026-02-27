@@ -1,0 +1,76 @@
+
+{% extends "container/Dockerfile" %}
+{% block build_stage %}
+
+# Configure a custom repo to serve patches
+RUN spack repo create ~/custom_packages tbouvier.patches
+
+RUN ls ~/custom_packages/spack_repo/tbouvier/patches
+RUN mkdir -p ~/custom_packages/spack_repo/tbouvier/patches/packages/py_py_spy && \
+    mkdir -p ~/custom_packages/spack_repo/tbouvier/patches/packages/py_ray
+
+COPY recipes/py_py_spy.package.py /root/custom_packages/spack_repo/tbouvier/patches/packages/py_py_spy/package.py
+COPY recipes/py_ray.package.py /root/custom_packages/spack_repo/tbouvier/patches/packages/py_ray/package.py
+
+RUN spack repo add ~/custom_packages/spack_repo/tbouvier/patches
+RUN spack repo list
+
+{{ super() }}
+
+#### The following should be placed before the `spack install` command
+
+# Install the software, remove unnecessary deps
+#RUN --mount=type=secret,id=oci_username_variable \
+#    --mount=type=secret,id=oci_password_variable \
+#    export OCI_USERNAME_VARIABLE=$(cat /run/secrets/oci_username_variable) && \
+#    export OCI_PASSWORD_VARIABLE=$(cat /run/secrets/oci_password_variable) && \
+#    cd /opt/spack-environment && spack env activate . && \
+#    spack install --fail-fast --verbose -j1
+
+# Update build cache
+#RUN --mount=type=secret,id=oci_username_variable \
+#    --mount=type=secret,id=oci_password_variable \
+#    export OCI_USERNAME_VARIABLE=$(cat /run/secrets/oci_username_variable) && \
+#    export OCI_PASSWORD_VARIABLE=$(cat /run/secrets/oci_password_variable) && \
+#    cd /opt/spack-environment && spack env activate . && \
+#    spack buildcache push --update-index --tag latest numpex-spack-mirror
+
+# Clone tutorial
+RUN git clone -b tutorial_HPCAsia https://github.com/pdidev/tutorial.git /root/tutorial
+
+{% endblock %}
+
+
+{% block final_stage %}
+
+COPY --from=builder /root/tutorial /opt/tutorial
+
+{{ super() }}
+
+# Copy the validation script into the container
+COPY environment_check_script.sh /opt/environment_check_script.sh
+
+# Force CC and CXX to system gcc
+RUN chmod +x /opt/environment_check_script.sh \
+    && sed -i '$d' /entrypoint.sh \
+    && { \
+      echo 'export CC=/usr/local/bin/gcc' \
+      && echo 'export CXX=/usr/local/bin/g++' \
+      && echo '/opt/environment_check_script.sh' \
+      && echo 'exec "$@"'; \
+    } >> /entrypoint.sh \
+
+# Proper PDI user
+ENV SERVICE_NAME="pdi"
+
+RUN groupadd --gid 1001 $SERVICE_NAME \
+    && useradd -u 1001 -g $SERVICE_NAME --shell /bin/false --no-create-home --home-dir /opt/$SERVICE_NAME $SERVICE_NAME \
+    && mkdir -p /opt/$SERVICE_NAME /var/log/$SERVICE_NAME \
+    # Change ownership of the entrypoint script to the service user
+    && chown -R $SERVICE_NAME:$SERVICE_NAME /opt/$SERVICE_NAME /var/log/$SERVICE_NAME /entrypoint.sh /opt/environment_check_script.sh /opt/tutorial
+
+USER $SERVICE_NAME
+
+WORKDIR /opt/tutorial
+
+{% endblock %}

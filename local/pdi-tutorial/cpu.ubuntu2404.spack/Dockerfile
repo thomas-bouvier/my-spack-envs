@@ -8,8 +8,8 @@ RUN ls ~/custom_packages/spack_repo/tbouvier/patches
 RUN mkdir -p ~/custom_packages/spack_repo/tbouvier/patches/packages/py_py_spy && \
     mkdir -p ~/custom_packages/spack_repo/tbouvier/patches/packages/py_ray
 
-COPY py_py_spy.package.py /root/custom_packages/spack_repo/tbouvier/patches/packages/py_py_spy/package.py
-COPY py_ray.package.py /root/custom_packages/spack_repo/tbouvier/patches/packages/py_ray/package.py
+COPY recipes/py_py_spy.package.py /root/custom_packages/spack_repo/tbouvier/patches/packages/py_py_spy/package.py
+COPY recipes/py_ray.package.py /root/custom_packages/spack_repo/tbouvier/patches/packages/py_ray/package.py
 
 RUN spack repo add ~/custom_packages/spack_repo/tbouvier/patches
 RUN spack repo list
