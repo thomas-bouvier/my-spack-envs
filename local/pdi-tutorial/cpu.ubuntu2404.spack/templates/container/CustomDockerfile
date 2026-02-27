@@ -9,31 +9,30 @@ RUN ls ~/custom_packages/spack_repo/tbouvier/patches
 RUN mkdir -p ~/custom_packages/spack_repo/tbouvier/patches/packages/py_py_spy && \
     mkdir -p ~/custom_packages/spack_repo/tbouvier/patches/packages/py_ray
 
+# Copying the patch
 COPY recipes/py_py_spy.package.py /root/custom_packages/spack_repo/tbouvier/patches/packages/py_py_spy/package.py
 COPY recipes/py_ray.package.py /root/custom_packages/spack_repo/tbouvier/patches/packages/py_ray/package.py
 
 RUN spack repo add ~/custom_packages/spack_repo/tbouvier/patches
 RUN spack repo list
 
+# Declare build-time arguments
+ARG OCI_USERNAME_VARIABLE
+ARG OCI_PASSWORD_VARIABLE
+
+# Use BuildKit secrets to mount the files and assign their contents to ARG
+RUN --mount=type=secret,id=oci_username_variable \
+    --mount=type=secret,id=oci_password_variable \
+    export OCI_USERNAME_VARIABLE=$(cat /run/secrets/oci_username_variable) \
+    export OCI_PASSWORD_VARIABLE=$(cat /run/secrets/oci_password_variable)
+
 {{ super() }}
 
-#### The following should be placed before the `spack install` command
 
-# Install the software, remove unnecessary deps
-#RUN --mount=type=secret,id=oci_username_variable \
-#    --mount=type=secret,id=oci_password_variable \
-#    export OCI_USERNAME_VARIABLE=$(cat /run/secrets/oci_username_variable) && \
-#    export OCI_PASSWORD_VARIABLE=$(cat /run/secrets/oci_password_variable) && \
-#    cd /opt/spack-environment && spack env activate . && \
-#    spack install --fail-fast --verbose -j1
-
-# Update build cache
-#RUN --mount=type=secret,id=oci_username_variable \
-#    --mount=type=secret,id=oci_password_variable \
-#    export OCI_USERNAME_VARIABLE=$(cat /run/secrets/oci_username_variable) && \
-#    export OCI_PASSWORD_VARIABLE=$(cat /run/secrets/oci_password_variable) && \
-#    cd /opt/spack-environment && spack env activate . && \
-#    spack buildcache push --update-index --tag latest numpex-spack-mirror
+##########
+# The following should be placed between the `spack install` and `spack gc` commands
+##########
+#RUN spack buildcache push --update-index --tag latest numpex-spack-mirror
 
 # Clone tutorial
 RUN git clone -b tutorial_HPCAsia https://github.com/pdidev/tutorial.git /root/tutorial
@@ -58,7 +57,7 @@ RUN chmod +x /opt/environment_check_script.sh \
       && echo 'export CXX=/usr/local/bin/g++' \
       && echo '/opt/environment_check_script.sh' \
       && echo 'exec "$@"'; \
-    } >> /entrypoint.sh \
+    } >> /entrypoint.sh
 
 # Proper PDI user
 ENV SERVICE_NAME="pdi"
