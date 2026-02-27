@@ -1,0 +1,20 @@
+# This is a Spack Environment file.
+#
+# It describes a set of packages to be installed, along with
+# configuration settings.
+spack:
+  view: true
+  concretizer:
+    unify: true
+  # add package specs to the `specs` list
+  specs:
+  - py-vllm
+  config:
+    install_tree:
+      padded_length: 512
+  mirrors:
+    numpex-spack-mirror:
+      url: oci://ghcr.io/thomas-bouvier/numpex-spack-mirror
+      access_pair:
+        id_variable: OCI_USERNAME_VARIABLE
+        secret_variable: OCI_PASSWORD_VARIABLE
