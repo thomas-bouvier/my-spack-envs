@@ -35,11 +35,11 @@ spack:
     - templates
   container:
     # docker | singularity
-    format: docker
+    format: singularity
     images:
       build: docker.io/spack/ubuntu-noble:nightly
       final: docker.io/gcc:15
-    template: container/CustomDockerfile
+    template: container/CustomApptainerDefinition
     strip: true
   mirrors:
     numpex-spack-mirror:
