@@ -22,12 +22,6 @@ RUN --mount=type=secret,id=oci_username_variable \
 
 {{ super() }}
 
-
-##########
-# The following should be placed between the `spack install` and `spack gc` commands
-##########
-#RUN spack buildcache push --update-index --tag latest numpex-spack-mirror
-
 # Clone tutorial
 RUN git clone -b tutorial_HPCAsia https://github.com/pdidev/tutorial.git /root/tutorial
 

@@ -44,6 +44,7 @@ spack:
   mirrors:
     numpex-spack-mirror:
       url: oci://ghcr.io/thomas-bouvier/numpex-spack-mirror
+      autopush: true
       access_pair:
         id_variable: OCI_USERNAME_VARIABLE
         secret_variable: OCI_PASSWORD_VARIABLE

@@ -22,12 +22,6 @@
 
 {{ super() }}
 
-
-  ##########
-  # The following should be placed between the `spack install` and `spack gc` commands
-  ##########
-  #spack buildcache push --update-index --tag latest numpex-spack-mirror
-
   # Clone tutorial
   git clone -b tutorial_HPCAsia https://github.com/pdidev/tutorial.git /root/tutorial
 
