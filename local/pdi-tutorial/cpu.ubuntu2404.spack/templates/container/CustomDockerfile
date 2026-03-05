@@ -1,8 +1,9 @@
+# https://github.com/spack/spack/tree/develop/share/spack/templates/container
 
 {% extends "container/Dockerfile" %}
 {% block build_stage %}
 
-COPY custom_packages /root/
+COPY custom_packages /root/custom_packages/
 
 RUN ls ~/custom_packages/spack_repo/tbouvier/patches
 
