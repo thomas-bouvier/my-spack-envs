@@ -1,35 +1,15 @@
-# 🖥️ Locally
+# 🖥️ Generic environments
 
-## Fedora
+These environments are not tailored for a specific hardware platform. Ideal to test stuff locally.
 
-Change the default configuration if needed:
-
-```console
-spack config --scope defaults edit config
-install_tree: $spack/opt/spack
-build_stage: $spack/var/spack/stage
-```
-
-Activate the environment and install it:
+I like to work on this repository from inside a container:
 
 ```console
-spack env activate ~/Dev/Spack/my-spack-envs/local
-spack install
+podman run -v /path/to/my-spack-envs:/root/my-spack-envs -v /path/to/spack-packages:/root/.spack/package_repos/fncqgg4 -it docker.io/spack/rockylinux9
 ```
 
-### Programming environment
-
-Using Fedora Asahi Remix 40, make sure that dev tools are installed on the system:
+To generate a container from a `spack.yaml`, simply use:
 
 ```console
-dnf group install "Development Tools"
-dnf group install "Development Libraries"
-dnf group install "C Development Tools and Libraries"
-dnf install gcc-gfortran
+spack containerize > Dockerfile
 ```
-
-### Last successful installations:
-
-| Date | `spack-envs` commit | Spack commit |
-|----------|----------|----------|
-| 2024-01-15 | `` |  |
