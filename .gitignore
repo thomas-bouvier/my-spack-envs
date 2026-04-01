@@ -4,3 +4,4 @@ test/
 *.sif
 Dockerfile
 *.def
+*.code-workspace
