@@ -1,9 +1,14 @@
 # Grid5000
 
-Change the default configuration if needed:
+If you encounter errors related to your storage quota being filled up during compilation, change the default configuration as follows:
 
 ```console
-spack config --scope defaults edit config
-install_tree: /my-spack/spack
-build_stage: /tmp/spack-stage
+spack config --scope defaults:base add config:install_tree:root:/my-spack/spack
+spack config --scope defaults:base add config:build_stage:/tmp/spack-stage
+```
+
+You can also edit the config file manually as follows:
+
+```console
+spack config --scope defaults:base edit config
 ```
