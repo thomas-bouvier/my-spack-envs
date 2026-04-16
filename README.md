@@ -9,7 +9,8 @@ My reproducible Spack environments of some HPC platforms I use.
 | genci | `inference` | `a100.jeanzay.spack` | Inference serving and deployment stack based on vLLM |
 | genci | `skao` | | Square Kilometre Array Observatory data processing pipeline |
 | grid5000 | `neomem` | `p100.chifflot.spack`, `v100.chifflot.spack`, `v100.gemini.spack` | Torch rehearsal backend to mitigate catastrophic forgetting with a focus on performance, written in C++ |
-| generic | `gysela-mini-app` | | A minimal application demonstrating GYSELA operations |
+| generic | `ai-inference` | | AI inference stack with packages like vLLM |
+| generic | `gysela-mini-app-io` | | A minimal application demonstrating GYSELA operations |
 | generic | `kénotron` |  |  Experimental fork of Nanotron, a minimalistic large language model 4D-parallelism training |
 | generic | `neomem` |  | Torch rehearsal backend to mitigate catastrophic forgetting with a focus on performance, written in C++ |
 | generic | `pdi-tutorial` |  | Tutorial environment for the PDI data interface library |
