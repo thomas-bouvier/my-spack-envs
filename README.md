@@ -21,6 +21,12 @@ My reproducible Spack environments of some HPC platforms I use.
 I like to work on this repository from inside a container:
 
 ```console
+podman run -v /path/to/my-spack-envs:/root/my-spack-envs -v /path/to/spack-packages:/root/.spack/package_repos/fncqgg4 -it docker.io/spack/rockylinux9:develop
+```
+
+You can also use a more stable Spack version:
+
+```console
 podman run -v /path/to/my-spack-envs:/root/my-spack-envs -v /path/to/spack-packages:/root/.spack/package_repos/fncqgg4 -it docker.io/spack/rockylinux9
 ```
 
