@@ -49,8 +49,8 @@ spack:
     numpex-spack-mirror:
       url: oci://ghcr.io/thomas-bouvier/numpex-spack-mirror
       access_pair:
-        id_variable: REGISTRY_USER
-        secret_variable: REGISTRY_TOKEN
+        id_variable: OCI_USERNAME_VARIABLE
+        secret_variable: OCI_PASSWORD_VARIABLE
   packages:
     all:
       variants: ~fortran ~mpi ~openmp cxxstd=17
