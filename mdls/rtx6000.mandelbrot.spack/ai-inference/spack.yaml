@@ -8,7 +8,7 @@ spack:
     unify: true
   # add package specs to the `specs` list
   specs:
-  - py-vllm
+  - py-vllm +cuda cuda_arch=120
   - cuda@12
   config:
     install_tree:
