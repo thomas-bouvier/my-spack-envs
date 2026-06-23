@@ -30,7 +30,7 @@ container:
   format: docker
   images:
     build: docker.io/spack/ubuntu-noble:1.2
-    final: docker.io/ubuntu-noble
+    final: docker.io/ubuntu:noble
 ```
 
 Of course you can modify the generated Dockerfile manually. In fact, I created a user manually in the final image as follows:
@@ -132,7 +132,7 @@ spack install --fail-fast --verbose -j1
 
 The final image can be ran as a container as follows:
 
-```console
+```bash
 podman run -it ghcr.io/thomas-bouvier/numpex-pdi-tutorial:HPCAsia2026
 ```
 

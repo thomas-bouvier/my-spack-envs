@@ -30,7 +30,15 @@ COPY --from=builder /root/tutorial /opt/tutorial
 
 {{ super() }}
 
-# Copy the validation script into the container
+# The runtime image is bare ubuntu:noble; install glibc's development files so
+# that Spack's gcc can link C/C++ programs (it needs crt1.o, crti.o, headers,
+# etc. from libc-dev). Also install make so the tutorial's CMake-generated
+# Makefiles can be driven; cmake itself comes from the Spack view.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libc6-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Sanity check script (runs at every container start, after Spack activation).
 COPY environment_check_script.sh /opt/environment_check_script.sh
 
 # Force CC and CXX to system gcc

@@ -37,6 +37,7 @@ spack:
     - vim
     - nano
     - gcc@15.3
+    - gmake
   config:
     template_dirs:
     - templates
@@ -47,7 +48,11 @@ spack:
       build: docker.io/spack/ubuntu-noble:1.2
       final: docker.io/ubuntu:noble
     template: container/CustomDockerfile
-    strip: true
+    # The strip step runs plain `strip` on static archives matched as
+    # `x-archive`, which removes the `ar` symbol index. Linking against any
+    # affected library (e.g. libgcc.a in the runtime image) then fails with
+    # `archive has no index; run ranlib to add one`.
+    strip: false
   repos:
     builtin:
       branch: releases/v2026.06
