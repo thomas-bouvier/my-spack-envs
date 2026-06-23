@@ -45,7 +45,7 @@ spack:
     format: docker
     images:
       build: docker.io/spack/ubuntu-noble:1.2
-      final: docker.io/ubuntu-noble
+      final: docker.io/ubuntu:noble
     template: container/CustomDockerfile
     strip: true
   repos:
