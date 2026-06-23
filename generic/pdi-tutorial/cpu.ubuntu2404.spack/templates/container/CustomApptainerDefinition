@@ -17,9 +17,6 @@
   spack repo add ~/custom_packages/spack_repo/tbouvier/patches
   spack repo list
 
-  # OCI credentials: set APPTAINER_DOCKER_USERNAME and APPTAINER_DOCKER_PASSWORD
-  # environment variables on the host before running `apptainer build`
-
 {{ super() }}
 
   # Clone tutorial
@@ -42,10 +39,6 @@
 
   # Validation script
   chmod +x /opt/environment_check_script.sh
-
-%environment
-  export CC=/usr/local/bin/gcc
-  export CXX=/usr/local/bin/g++
 
 %runscript
   cd /opt/tutorial

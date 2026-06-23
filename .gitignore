@@ -5,3 +5,4 @@ test/
 Dockerfile
 *.def
 *.code-workspace
+__pycache__

@@ -1,4 +1,4 @@
-# local/pdi-tutorial/cpu.ubuntu2404.spack
+# generic/pdi-tutorial/cpu.ubuntu2404.spack
 
 Use one of the following commands to generate a container recipe:
 
