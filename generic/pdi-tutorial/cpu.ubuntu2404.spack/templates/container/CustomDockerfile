@@ -41,24 +41,25 @@ RUN apt-get update \
 # Sanity check script (runs at every container start, after Spack activation).
 COPY environment_check_script.sh /opt/environment_check_script.sh
 
-# Force CC and CXX to system gcc
-RUN chmod +x /opt/environment_check_script.sh \
-    && sed -i '$d' /entrypoint.sh \
-    && { \
-      echo '/opt/environment_check_script.sh' \
-      && echo 'exec "$@"'; \
-    } >> /entrypoint.sh
+# Custom entrypoint that remaps the `pdi` user to the caller's UID/GID at run
+# time (via $HOST_UID / $HOST_GID), so bind-mounted host volumes keep correct
+# ownership on both sides. Overwrites the entrypoint produced by the parent
+# template (which only sourced the Spack activation script).
+COPY entrypoint.sh /entrypoint.sh
 
-# Proper PDI user
+# pdi user/group created with placeholder UID/GID 1001. The entrypoint remaps
+# them to $HOST_UID / $HOST_GID at run time.
 ENV SERVICE_NAME="pdi"
 
-RUN groupadd --gid 1001 $SERVICE_NAME \
-    && useradd -u 1001 -g $SERVICE_NAME --shell /bin/false --no-create-home --home-dir /opt/$SERVICE_NAME $SERVICE_NAME \
+RUN chmod +x /opt/environment_check_script.sh /entrypoint.sh \
+    && groupadd --gid 1001 $SERVICE_NAME \
+    && useradd -u 1001 -g $SERVICE_NAME --shell /bin/bash --no-create-home --home-dir /opt/$SERVICE_NAME $SERVICE_NAME \
     && mkdir -p /opt/$SERVICE_NAME /var/log/$SERVICE_NAME \
-    # Change ownership of the entrypoint script to the service user
-    && chown -R $SERVICE_NAME:$SERVICE_NAME /opt/$SERVICE_NAME /var/log/$SERVICE_NAME /entrypoint.sh /opt/environment_check_script.sh /opt/tutorial
+    && chown -R $SERVICE_NAME:$SERVICE_NAME /opt/$SERVICE_NAME /var/log/$SERVICE_NAME /opt/environment_check_script.sh /opt/tutorial
 
-USER $SERVICE_NAME
+# Intentionally NO `USER` directive: the entrypoint must start as root so it
+# can call usermod/groupmod, then drops privileges to $SERVICE_NAME via setpriv
+# before exec'ing the CMD.
 
 WORKDIR /opt/tutorial
 
