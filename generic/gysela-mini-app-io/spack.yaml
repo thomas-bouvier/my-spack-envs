@@ -43,7 +43,7 @@ spack:
       git: https://github.com/gyselax/spack.git
       branch: releases/v2025.11
     builtin:
-      branch: develop
+      branch: releases/v2026.06
   view: true
   mirrors:
     numpex-spack-mirror:
@@ -51,6 +51,7 @@ spack:
       access_pair:
         id_variable: OCI_USERNAME_VARIABLE
         secret_variable: OCI_PASSWORD_VARIABLE
+      exclude_binary: ["dev_path=*"]
   packages:
     all:
       variants: ~fortran ~mpi ~openmp cxxstd=17
