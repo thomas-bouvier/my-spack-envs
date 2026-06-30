@@ -3,7 +3,7 @@
 # It describes a set of packages to be installed, along with
 # configuration settings.
 spack:
-  view: true
+  view: ~/spack-view/mdls/mandelbrot/rtx6000.ai-inference
   concretizer:
     unify: true
   # add package specs to the `specs` list
