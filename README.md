@@ -1,20 +1,21 @@
 # my-spack-envs
 
-My reproducible Spack environments of some HPC platforms I use.
+My reproducible Spack environments for the HPC platforms I use.
 
-| Computing facility | Environment | Spack environments | Description |
-|----------|---------|---------------------|-------------|
-| alcf | `nanotron` | `a100.polaris.spack` | Distributed training framework for large language models |
-| alcf | `neomem` | `a100.polaris.spack`, `a100.thetagpu.spack` | Torch rehearsal backend to mitigate catastrophic forgetting with a focus on performance, written in C++ |
-| genci | `inference` | `a100.jeanzay.spack` | Inference serving and deployment stack based on vLLM |
-| genci | `skao` | | Square Kilometre Array Observatory data processing pipeline |
-| grid5000 | `neomem` | `p100.chifflot.spack`, `v100.chifflot.spack`, `v100.gemini.spack` | Torch rehearsal backend to mitigate catastrophic forgetting with a focus on performance, written in C++ |
-| generic | `ai-inference` | | AI inference stack with packages like vLLM |
-| generic | `gysela-mini-app-io` | | A minimal application demonstrating GYSELA operations |
-| generic | `kénotron` |  |  Experimental fork of Nanotron, a minimalistic large language model 4D-parallelism training |
-| generic | `neomem` |  | Torch rehearsal backend to mitigate catastrophic forgetting with a focus on performance, written in C++ |
-| generic | `pdi-tutorial` |  | Tutorial environment for the PDI data interface library |
-| generic | `pdidev` |  | PDI development environment and spack-based CI test images (16 variants) |
+| Facility | Machine | Sub-dir | GPU | Environment purpose |
+| --- | --- | --- | --- | --- |
+| ALCF | Polaris | alcf/polaris/a100.nanotron/ | A100 (cuda_arch=80) | LLM training with Nanotron |
+| ALCF | Polaris | alcf/polaris/a100.neomem/ | A100 (cuda_arch=80) | Neomem continual learning |
+| ALCF | ThetaGPU | alcf/thetagpu/a100.neomem/ | A100 (cuda_arch=80) | Neomem continual learning (older, CUDA 11) |
+| GENCI | Jean Zay | genci/jeanzay/a100.ai-inference/ | A100 | vLLM AI inference serving |
+| Grid'5000 | Chifflot | grid5000/chifflot/p100.neomem/ | P100 (cuda_arch=60) | Neomem continual learning |
+| Grid'5000 | Chifflot | grid5000/chifflot/v100.neomem/ | V100 (cuda_arch=70) | Neomem continual learning |
+| Grid'5000 | Gemini | grid5000/gemini/v100.neomem/ | V100 (cuda_arch=70) | Neomem continual learning |
+| MDLS | Mandelbrot | mdls/mandelbrot/rtx6000.ai-inference/ | RTX 6000 Ada (cuda_arch=120) | vLLM AI inference serving |
+| Generic | any | generic/neomem/ | CUDA (aarch64 dev) | NeoMem local dev |
+| Generic | any | generic/kénotron/ | A100 (cuda_arch=80) | Kénotron 4D-parallel LLM training (containerized) |
+| Generic | any | generic/gysela-mini-app-io/ | — | GYSELA mini-app I/O |
+| Containerized | Docker/Apptainer | containerized/ubuntu2404.pdi-tutorial/ | — | PDI tutorial container (HPCAsia 2026) |
 
 ## Workflows
 
