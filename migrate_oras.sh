@@ -11,7 +11,7 @@
 #   ./migrate-spack-buildcache.sh
 #
 # After completion, rebuild the index on the new mirror:
-#   spack mirror add new-cache oci://ghcr.io/$DST_REPO
+#   spack mirror add --oci-username githubuser --oci-password DST_TOKEN new-cache oci://ghcr.io/$DST_REPO
 #   spack buildcache update-index new-cache
 
 set -euo pipefail
