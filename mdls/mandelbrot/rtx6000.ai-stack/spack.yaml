@@ -17,6 +17,10 @@ spack:
     - py-vllm +cuda cuda_arch=120 %gcc@14.3
     - cuda@12
     - gloo@2025-12-02
+    - py-stable-baselines3 +vector +sdl +xla
+    - py-langgraph
+    - py-gymnasium
+    - py-albumentationsx
   repos:
     builtin:
       destination: ${HOME}/git/spack-packages
