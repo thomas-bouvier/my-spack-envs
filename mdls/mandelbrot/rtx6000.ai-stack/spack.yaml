@@ -21,6 +21,7 @@ spack:
     - py-langgraph
     - py-gymnasium
     - py-albumentationsx
+    - py-smolagents
   repos:
     builtin:
       destination: ${HOME}/git/spack-packages
