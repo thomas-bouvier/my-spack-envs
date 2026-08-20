@@ -22,6 +22,7 @@ spack:
     - py-gymnasium
     - py-albumentationsx
     - py-smolagents
+    - py-nvidia-dali
   repos:
     builtin:
       destination: ${HOME}/git/spack-packages
