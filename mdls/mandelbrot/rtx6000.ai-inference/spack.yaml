@@ -14,7 +14,7 @@ spack:
   - group: app
     needs: [compiler]
     specs:
-    - py-vllm +cuda cuda_arch=120 %gcc@14.3
+    - py-vllm@0.28 +cuda cuda_arch=120 %gcc@14.3
     - cuda@12
     - gloo@2025-12-02
   repos:
@@ -24,7 +24,7 @@ spack:
       branch: feat/add-py-vllm
   config:
     install_tree:
-      padded_length: 512
+      padded_length: 256
       root: /local/home/${USER}/spack-opt
     build_stage:
     - /rtx/${USER}/spack-stage
