@@ -16,7 +16,6 @@ spack:
     specs:
     - py-vllm@0.28 +cuda cuda_arch=120 %gcc@14.3
     - cuda@12
-    - gloo@2025-12-02
   repos:
     builtin:
       destination: ${HOME}/git/spack-packages
